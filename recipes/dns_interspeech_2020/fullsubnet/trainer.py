@@ -40,8 +40,9 @@ class Trainer(BaseTrainer):
         ):
             self.optimizer.zero_grad()
 
-            noisy = noisy.to(self.rank)
-            clean = clean.to(self.rank)
+            if torch.cuda.is_available():
+                noisy = noisy.to(self.rank)
+                clean = clean.to(self.rank)
 
             noisy_mag, noisy_phase, noisy_real, noisy_imag = self.torch_stft(noisy)
             _, _, clean_real, clean_imag = self.torch_stft(clean)
@@ -112,8 +113,9 @@ class Trainer(BaseTrainer):
             name = name[0]
             speech_type = speech_type[0]
 
-            noisy = noisy.to(self.rank)
-            clean = clean.to(self.rank)
+            if torch.cuda.is_available():
+                noisy = noisy.to(self.rank)
+                clean = clean.to(self.rank)
 
             noisy_mag, noisy_phase, noisy_real, noisy_imag = self.torch_stft(noisy)
             _, _, clean_real, clean_imag = self.torch_stft(clean)
@@ -137,9 +139,14 @@ class Trainer(BaseTrainer):
                 input_type="real_imag",
             )
 
-            noisy = noisy.detach().squeeze(0).cpu().numpy()
-            clean = clean.detach().squeeze(0).cpu().numpy()
-            enhanced = enhanced.detach().squeeze(0).cpu().numpy()
+            if torch.cuda.is_available():
+                noisy = noisy.detach().squeeze(0).cpu().numpy()
+                clean = clean.detach().squeeze(0).cpu().numpy()
+                enhanced = enhanced.detach().squeeze(0).cpu().numpy()
+            else:
+                noisy = noisy.squeeze(0).cpu().numpy()
+                clean = clean.squeeze(0).cpu().numpy()
+                enhanced = enhanced.squeeze(0).cpu().numpy()                
 
             assert len(noisy) == len(clean) == len(enhanced)
             loss_total += loss

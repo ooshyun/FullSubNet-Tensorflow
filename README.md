@@ -55,3 +55,8 @@ If you use this code for your research, please consider citeing:
 ## License
 
 This respository Under the [MIT license](LICENSE).
+
+
+
+## Add VCTK
+Datapath: /Users/seunghyunoh/workplace/study/NoiseReduction/Tiny-SpeechEnhancement/data/VoiceBankDEMAND

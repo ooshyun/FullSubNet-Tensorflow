@@ -38,9 +38,10 @@ class Trainer(BaseTrainer):
             else self.train_dataloader
         ):
             self.optimizer.zero_grad()
-
-            noisy = noisy.to(self.rank)
-            clean = clean.to(self.rank)
+            
+            if torch.cuda.is_available():
+                noisy = noisy.to(self.rank)
+                clean = clean.to(self.rank)
 
             noisy_mag, noisy_phase, noisy_real, noisy_imag = self.torch_stft(noisy)
             _, _, clean_real, clean_imag = self.torch_stft(clean)
@@ -100,15 +101,20 @@ class Trainer(BaseTrainer):
         validation_score_list = {"With_reverb": 0.0, "No_reverb": 0.0}
 
         # speech_type in ("with_reverb", "no_reverb")
-        for i, (noisy, clean, name, speech_type) in tqdm(
+        # for i, (noisy, clean, name, speech_type) in tqdm(
+        for i, (noisy, clean) in tqdm(
             enumerate(self.valid_dataloader), desc="Validation"
         ):
             assert len(name) == 1, "The batch size for the validation stage must be one."
-            name = name[0]
-            speech_type = speech_type[0]
+            # name = name[0]
+            # speech_type = speech_type[0]
 
-            noisy = noisy.to(self.rank)
-            clean = clean.to(self.rank)
+            name = "None"
+            speech_type = "no_reverb"
+            
+            if torch.cuda.is_available():
+                noisy = noisy.to(self.rank)
+                clean = clean.to(self.rank)
 
             noisy_mag, noisy_phase, noisy_real, noisy_imag = self.torch_stft(noisy)
             _, _, clean_real, clean_imag = self.torch_stft(clean)

@@ -24,12 +24,12 @@ beta2 = 0.999
 
 
 [train_dataset]
-path = "dataset_train.Dataset"
+path = "dataset_train_voicebank.VoiceBankDataset"
 [train_dataset.args]
-clean_dataset = "~/Datasets/DNS-Challenge-INTERSPEECH/datasets/clean_0.6.txt"
+clean_dataset = "~/workplace/study/lstm-example/FullSubNet-Tensorflow/recipes/dns_interspeech_2020/voicebank_txt/train_clean.txt"
 clean_dataset_limit = false
 clean_dataset_offset = 0
-noise_dataset = "~/Datasets/DNS-Challenge-INTERSPEECH/datasets/noise.txt"
+noise_dataset = "~/workplace/study/lstm-example/FullSubNet-Tensorflow/recipes/dns_interspeech_2020/voicebank_txt/train_noisy.txt"
 noise_dataset_limit = false
 noise_dataset_offset = 0
 num_workers = 36
@@ -56,12 +56,14 @@ pin_memory = false
 
 
 [validation_dataset]
-path = "dataset_validation.Dataset"
+path = "dataset_validation_voicebank.VoiceBankDataset"
 [validation_dataset.args]
 dataset_dir_list = [
     "~/Datasets/DNS-Challenge-INTERSPEECH/datasets/test_set/synthetic/with_reverb/",
     "~/Datasets/DNS-Challenge-INTERSPEECH/datasets/test_set/synthetic/no_reverb/",
 ]
+clean_dataset = "~/workplace/study/lstm-example/FullSubNet-Tensorflow/recipes/dns_interspeech_2020/voicebank_txt/val_clean.txt"
+noise_dataset = "~/workplace/study/lstm-example/FullSubNet-Tensorflow/recipes/dns_interspeech_2020/voicebank_txt/val_noisy.txt"
 sr = 16000
 
 
@@ -82,7 +84,7 @@ weight_init = true
 path = "trainer.Trainer"
 [trainer.train]
 clip_grad_norm_value = 10
-epochs = 9999
+epochs = 2
 save_checkpoint_interval = 1
 [trainer.validation]
 save_max_metric_score = true

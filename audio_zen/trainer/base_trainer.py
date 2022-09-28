@@ -29,7 +29,7 @@ class BaseTrainer:
     def __init__(
         self, dist, rank, config, resume, only_validation, model, loss_function, optimizer
     ):
-        self.model = DistributedDataParallel(model.cuda(rank), device_ids=[rank])
+        self.model = DistributedDataParallel(model.cuda(rank), device_ids=[rank]) if torch.cuda.is_available() else model
         self.optimizer = optimizer
         self.loss_function = loss_function
 
