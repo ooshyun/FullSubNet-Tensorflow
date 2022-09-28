@@ -29,7 +29,8 @@ class BaseTrainer:
     def __init__(
         self, dist, rank, config, resume, only_validation, model, loss_function, optimizer
     ):
-        self.model = DistributedDataParallel(model.cuda(rank), device_ids=[rank]) if torch.cuda.is_available() else model
+        # self.model = DistributedDataParallel(model.cuda(rank), device_ids=[rank])
+        self.model = model.to(torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
         self.optimizer = optimizer
         self.loss_function = loss_function
 
@@ -149,7 +150,7 @@ class BaseTrainer:
 
         model_checkpoint = torch.load(model_path.as_posix(), map_location="cpu")
         self.model.load_state_dict(model_checkpoint["model"], strict=False)
-        self.model.to(self.rank)
+        # self.model.to(self.rank)
 
         if self.rank == 0:
             print(f"Model preloaded successfully from {model_path.as_posix()}.")

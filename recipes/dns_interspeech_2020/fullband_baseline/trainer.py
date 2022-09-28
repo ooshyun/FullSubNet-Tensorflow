@@ -39,9 +39,9 @@ class Trainer(BaseTrainer):
         ):
             self.optimizer.zero_grad()
             
-            if torch.cuda.is_available():
-                noisy = noisy.to(self.rank)
-                clean = clean.to(self.rank)
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            noisy = noisy.to(device)
+            clean = clean.to(device)
 
             noisy_mag, noisy_phase, noisy_real, noisy_imag = self.torch_stft(noisy)
             _, _, clean_real, clean_imag = self.torch_stft(clean)
@@ -112,9 +112,9 @@ class Trainer(BaseTrainer):
             name = "None"
             speech_type = "no_reverb"
             
-            if torch.cuda.is_available():
-                noisy = noisy.to(self.rank)
-                clean = clean.to(self.rank)
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            noisy = noisy.to(device)
+            clean = clean.to(device)
 
             noisy_mag, noisy_phase, noisy_real, noisy_imag = self.torch_stft(noisy)
             _, _, clean_real, clean_imag = self.torch_stft(clean)

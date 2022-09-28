@@ -22,16 +22,15 @@ def entry(rank, config, resume, only_validation):
     np.random.seed(config["meta"]["seed"])
     random.seed(config["meta"]["seed"])
 
-    # [TODO] need to cpu if gpu x
-    if torch.cuda.is_available():
-        torch.cuda.set_device(rank)
+    # if torch.cuda.is_available():
+    #     torch.cuda.set_device(rank)
 
     # Initialize the process group
     # The environment variables necessary to initialize a Torch process group are provided to you by this module,
     # and no need for you to pass ``RANK`` manually.
-    if torch.cuda.is_available():
-        torch.distributed.init_process_group(backend="nccl")
-        print(f"Process {rank + 1} initialized.")
+    # if torch.cuda.is_available():
+    #     torch.distributed.init_process_group(backend="nccl")
+    #     print(f"Process {rank + 1} initialized.")
 
     # The DistributedSampler will split the dataset into the several cross-process parts.
     # On the contrary, setting "Sampler=None, shuffle=True", each GPU will get all data in the whole dataset.
@@ -39,12 +38,12 @@ def entry(rank, config, resume, only_validation):
         config["train_dataset"]["path"], args=config["train_dataset"]["args"]
     )
 
-    if torch.cuda.is_available():
-        sampler = DistributedSampler(dataset=train_dataset, rank=rank, shuffle=True)
+    # if torch.cuda.is_available():
+    #     sampler = DistributedSampler(dataset=train_dataset, rank=rank, shuffle=True)
     
     train_dataloader = DataLoader(
         dataset=train_dataset,
-        sampler=sampler if torch.cuda.is_available() else None,
+        # sampler=None,
         shuffle=False,
         **config["train_dataset"]["dataloader"],
     )
@@ -109,7 +108,8 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    local_rank = int(os.environ["LOCAL_RANK"])
+    # local_rank = int(os.environ["LOCAL_RANK"])
+    local_rank = 0
 
     if args.preloaded_model_path:
         assert not args.resume, "The 'resume' conflicts with the 'preloaded_model_path'."
