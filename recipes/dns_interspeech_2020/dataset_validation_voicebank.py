@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import logging
 import librosa
 
 from audio_zen.acoustics.feature import load_wav
@@ -37,6 +38,7 @@ class VoiceBankDataset(BaseDataset):
             line.rstrip("\n") for line in open(expand_path(noise_dataset), "r")
         ]
 
+        self.length = len(self.noisy_dataset_list)
         self.sr = sr
 
     def __len__(self):
@@ -56,12 +58,9 @@ class VoiceBankDataset(BaseDataset):
         noisy_file_path = self.noisy_dataset_list[item]
         clean_file_path = self.clean_dataset_list[item]
 
-        noisy_filename, _ = basename(noisy_file_path)
+        assert noisy_file_path.split("/")[-1] == clean_file_path.split("/")[-1]
 
         noisy = load_wav(os.path.abspath(os.path.expanduser(noisy_file_path)), sr=self.sr)
         clean = load_wav(os.path.abspath(os.path.expanduser(clean_file_path)), sr=self.sr)
 
-        return noisy, clean
-
-        
         return noisy, clean

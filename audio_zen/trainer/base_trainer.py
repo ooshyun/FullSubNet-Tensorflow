@@ -343,6 +343,7 @@ class BaseTrainer:
 
         stoi_mean = 0.0
         wb_pesq_mean = 0.0
+
         for metric_name in metrics_list:
             score_on_noisy = Parallel(n_jobs=num_workers)(
                 delayed(metrics.REGISTERED_METRICS[metric_name])(ref, est)
@@ -356,6 +357,7 @@ class BaseTrainer:
             # Add mean value of the metric to tensorboard
             mean_score_on_noisy = np.mean(score_on_noisy)
             mean_score_on_enhanced = np.mean(score_on_enhanced)
+
             self.writer.add_scalars(
                 f"{mark}_Validation/{metric_name}",
                 {"Noisy": mean_score_on_noisy, "Enhanced": mean_score_on_enhanced},

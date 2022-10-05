@@ -26,10 +26,10 @@ beta2 = 0.999
 [train_dataset]
 path = "dataset_train_voicebank.VoiceBankDataset"
 [train_dataset.args]
-clean_dataset = "~/workplace/study/lstm-example/FullSubNet-Tensorflow/recipes/dns_interspeech_2020/voicebank_txt/train_clean.txt"
+clean_dataset = "~/workplace/project/SpeechEnhancement/example/FullSubNet-Custom/recipes/dns_interspeech_2020/voicebank_txt/train_clean.txt"
 clean_dataset_limit = false
 clean_dataset_offset = 0
-noise_dataset = "~/workplace/study/lstm-example/FullSubNet-Tensorflow/recipes/dns_interspeech_2020/voicebank_txt/train_noisy.txt"
+noise_dataset = "~/workplace/project/SpeechEnhancement/example/FullSubNet-Custom/recipes/dns_interspeech_2020/voicebank_txt/train_noisy.txt"
 noise_dataset_limit = false
 noise_dataset_offset = 0
 num_workers = 36
@@ -43,14 +43,14 @@ rir_dataset_offset = 0
 silence_length = 0.2
 snr_range = [-5, 20]
 sr = 16000
-sub_sample_length = 3.072
+sub_sample_length = 1.008
 target_dB_FS = -25
 target_dB_FS_floating_value = 10
 
 
 [train_dataset.dataloader]
 batch_size = 100
-num_workers = 40
+num_workers = 0
 drop_last = true
 pin_memory = false
 
@@ -62,8 +62,8 @@ dataset_dir_list = [
     "~/Datasets/DNS-Challenge-INTERSPEECH/datasets/test_set/synthetic/with_reverb/",
     "~/Datasets/DNS-Challenge-INTERSPEECH/datasets/test_set/synthetic/no_reverb/",
 ]
-clean_dataset = "~/workplace/study/lstm-example/FullSubNet-Tensorflow/recipes/dns_interspeech_2020/voicebank_txt/val_clean.txt"
-noise_dataset = "~/workplace/study/lstm-example/FullSubNet-Tensorflow/recipes/dns_interspeech_2020/voicebank_txt/val_noisy.txt"
+clean_dataset = "~/workplace/project/SpeechEnhancement/example/FullSubNet-Custom/recipes/dns_interspeech_2020/voicebank_txt/val_clean.txt"
+noise_dataset = "~/workplace/project/SpeechEnhancement/example/FullSubNet-Custom/recipes/dns_interspeech_2020/voicebank_txt/val_noisy.txt"
 sr = 16000
 
 
@@ -84,7 +84,7 @@ weight_init = true
 path = "trainer.Trainer"
 [trainer.train]
 clip_grad_norm_value = 10
-epochs = 2
+epochs = 200
 save_checkpoint_interval = 1
 [trainer.validation]
 save_max_metric_score = true

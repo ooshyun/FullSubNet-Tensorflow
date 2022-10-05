@@ -23,7 +23,7 @@ class BaseInferencer:
         print("Loading inference dataset...")
         self.dataloader = self._load_dataloader(config["dataset"])
         print("Loading model...")
-        self.model, epoch = self._load_model(config["model"], checkpoint_path, self.device)
+        self.model, epoch = self._load_model(config["model"], checkpoint_path, self.device) # TODO: Error
         self.inference_config = config["inferencer"]
 
         self.enhanced_dir = root_dir / f"enhanced_{str(epoch).zfill(4)}"
@@ -154,7 +154,6 @@ class BaseInferencer:
         model_static_dict = {
             key.replace("module.", ""): value for key, value in model_static_dict.items()
         }
-
         model.load_state_dict(model_static_dict)
         model.to(device)
         model.eval()
@@ -179,7 +178,7 @@ class BaseInferencer:
                 print(f"Warning: enhanced is not in the range [-1, 1], {name}")
 
             amp = np.iinfo(np.int16).max
-            enhanced = np.int16(0.8 * amp * enhanced / np.max(np.abs(enhanced)))
+            enhanced = np.int16(0.8 * amp * enhanced / np.max(np.abs(enhanced))) # ?
             sf.write(
                 self.enhanced_dir / f"{name}.wav",
                 enhanced,

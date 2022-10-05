@@ -199,31 +199,51 @@ class VoiceBankDataset(BaseDataset):
         return noisy_y, clean_y
 
     def __getitem__(self, item):
-        clean_fpath = self.clean_dataset_list[item]
-        clean_y = load_wav(clean_fpath, sr=self.sr)
-        clean_y = subsample(
-            clean_y, sub_sample_length=int(self.sub_sample_length * self.sr)
+        # clean_fpath = self.clean_dataset_list[item]
+        # clean_y = load_wav(clean_fpath, sr=self.sr)
+        # clean_y = subsample(
+        #     clean_y, sub_sample_length=int(self.sub_sample_length * self.sr)
+        # )
+
+        # noise_y = self._select_noise_y(target_length=len(clean_y))
+        # assert len(clean_y) == len(noise_y), f"Inequality: {len(clean_y)=} {len(noise_y)=}"
+
+        # snr = self._random_select_from(self.snr_list)
+        # # use_reverb = bool(np.random.random(1) < self.reverb_proportion)
+        # use_reverb = False
+
+        # noisy_y, clean_y = self.snr_mix(
+        #     clean_y=clean_y,
+        #     noise_y=noise_y,
+        #     snr=snr,
+        #     target_dB_FS=self.target_dB_FS,
+        #     target_dB_FS_floating_value=self.target_dB_FS_floating_value,
+        #     rir=load_wav(self._random_select_from(self.rir_dataset_list), sr=self.sr)
+        #     if use_reverb
+        #     else None,
+        # )
+
+        # noisy_y = noisy_y.astype(np.float32)
+        # clean_y = clean_y.astype(np.float32)
+
+        clean_file_path = self.clean_dataset_list[item]
+        noisy_file_path = self.noise_dataset_list[item]
+
+        assert noisy_file_path.split("/")[-1] == clean_file_path.split("/")[-1]
+
+        clean_y = load_wav(clean_file_path, sr=self.sr)
+        noisy_y = load_wav(noisy_file_path, sr=self.sr)
+
+        clean_y, start_position = subsample(
+            clean_y, sub_sample_length=int(self.sub_sample_length * self.sr), return_start_position=True
+        )
+        noisy_y = subsample(
+            noisy_y, sub_sample_length=int(self.sub_sample_length * self.sr), start_position=start_position
         )
 
-        noise_y = self._select_noise_y(target_length=len(clean_y))
-        assert len(clean_y) == len(noise_y), f"Inequality: {len(clean_y)=} {len(noise_y)=}"
+        assert len(clean_y) == len(noisy_y), f"Inequality: {len(clean_y)=} {len(noisy_y)=}"
 
-        snr = self._random_select_from(self.snr_list)
-        # use_reverb = bool(np.random.random(1) < self.reverb_proportion)
-        use_reverb = False
-
-        noisy_y, clean_y = self.snr_mix(
-            clean_y=clean_y,
-            noise_y=noise_y,
-            snr=snr,
-            target_dB_FS=self.target_dB_FS,
-            target_dB_FS_floating_value=self.target_dB_FS_floating_value,
-            rir=load_wav(self._random_select_from(self.rir_dataset_list), sr=self.sr)
-            if use_reverb
-            else None,
-        )
-
-        noisy_y = noisy_y.astype(np.float32)
         clean_y = clean_y.astype(np.float32)
+        noisy_y = noisy_y.astype(np.float32)
 
         return noisy_y, clean_y

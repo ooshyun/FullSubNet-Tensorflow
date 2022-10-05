@@ -105,12 +105,12 @@ class Trainer(BaseTrainer):
         for i, (noisy, clean) in tqdm(
             enumerate(self.valid_dataloader), desc="Validation"
         ):
-            assert len(name) == 1, "The batch size for the validation stage must be one."
+            name = "None"
+            speech_type = "No_reverb"
+
+            # assert len(name) == 1, "The batch size for the validation stage must be one."
             # name = name[0]
             # speech_type = speech_type[0]
-
-            name = "None"
-            speech_type = "no_reverb"
             
             device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
             noisy = noisy.to(device)

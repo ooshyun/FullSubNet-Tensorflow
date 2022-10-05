@@ -11,6 +11,7 @@ from audio_zen.utils import initialize_module
 
 def main(config, checkpoint_path, output_dir):
     inferencer_class = initialize_module(config["inferencer"]["path"], initialize=False)
+
     inferencer = inferencer_class(
         config,
         checkpoint_path,

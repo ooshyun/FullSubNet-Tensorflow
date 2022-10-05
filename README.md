@@ -58,5 +58,5 @@ This respository Under the [MIT license](LICENSE).
 
 
 
-## Add VCTK
+## Add VoiceBankDEMAND
 Datapath: /Users/seunghyunoh/workplace/study/NoiseReduction/Tiny-SpeechEnhancement/data/VoiceBankDEMAND
